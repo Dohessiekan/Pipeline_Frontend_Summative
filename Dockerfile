@@ -1,30 +1,24 @@
 # Use an official Python runtime as the base image
-# Use Python 3.11 base image
 FROM python:3.11-slim
-
-# Install necessary system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libjpeg-dev \
-    zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the requirements file to the container
+# Install Flask
+RUN pip install Flask
+
+# Copy the requirements file and install dependencies
 COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the entire project directory into the container
+# Copy the entire project directory (including templates) into the container
 COPY . .
 
-# Expose the FastAPI port (default is 8000)
+# Expose the port that Flask will run on
 EXPOSE 5000
 
-# Command to run the FastAPI application
-CMD ["python", "app.py"]
+# Set the environment variable for Flask
+ENV FLASK_APP=app.py
+
+# Run Flask (on all interfaces so it can be accessed outside the container)
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
