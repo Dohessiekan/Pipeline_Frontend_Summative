@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f4f8; /* Light blueish-grey background */
+      font-family: Arial, sans-serif;
+    }
+
+    .custom-image {
+      border: 2px solid #ddd; /* Light border */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      border-radius: 5px; /* Slight rounding of corners */
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .custom-image:hover {
+      transform: scale(1.05); /* Zoom effect on hover */
+      box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+    }
+
+    .banner {
+      position: relative;
+      height: 400px;
+      background: url("https://th.bing.com/th/id/R.08e5cf21b19291bef9c78d7b4bae41b1?rik=c1Rr6XKraKBmqg&pid=ImgRaw&r=0") no-repeat center center/cover;
+      transition: all 0.5s ease;
+    }
+
+    .banner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Dark transparent layer */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .banner-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    .banner-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .banner-content .btn-start {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+
+    .banner-content .btn-start:hover {
+      background-color: #0056b3;
+    }
+
+    .section-title {
+      color: #007bff; /* Blue heading text */
+      transition: color 0.3s ease;
+    }
+
+    .section-title:hover {
+      color: #0056b3; /* Change color on hover */
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">FraudCatcher</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="visualization">Visualization</a></li>
+          <li class="nav-item"><a class="nav-link" href="prediction">Prediction</a></li>
+          <li class="nav-item"><a class="nav-link" href="retraining">Retraining</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner Section -->
+  <div class="banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+      <h1>Welcome to Our Platform</h1>
+      <p>Unlock the power of AI and data visualization.</p>
+      <a href="prediction" class="btn btn-start">Start</a>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="container py-5">
+    <h2 class="text-center section-title mb-4">About Our Platform</h2>
+    <p class="text-center">Our platform brings together powerful tools for machine learning, data visualization, and AI model retraining to empower users in making data-driven decisions.</p>
+  </div>
+
+  <!-- Prediction Section -->
+  <div class="container py-4 my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h3 class="section-title">Prediction</h3>
+        <p>Make accurate, real-time predictions using our platform. Whether you need fraud detection, sales forecasting, or any other application, we’ve got you covered.</p>
+      </div>
+      <div class="col-md-6">
+        <img src="https://sdsclub.com/wp-content/uploads/2020/10/5-Data-Visualization-Techniques3-min.jpg" 
+             alt="Prediction Image" 
+             class="img-fluid custom-image">
+      </div>
+    </div>
+  </div>
+
+  <!-- Visualization Section -->
+  <div class="container py-4 my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 order-md-2">
+        <h3 class="section-title">Visualization</h3>
+        <p>Explore your data with dynamic visualizations. From trends over time to correlation heatmaps, uncover insights to make better decisions.</p>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <img src="https://miro.medium.com/max/3200/0*FOmh8xmk3Or2xlaJ.jpg" 
+             alt="Visualization Image" 
+             class="img-fluid custom-image">
+      </div>
+    </div>
+  </div>
+
+  <!-- Retraining Section -->
+  <div class="container py-4 my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h3 class="section-title">Retraining</h3>
+        <p>Update your models with new data to ensure optimal performance. Our platform lets you retrain models easily and see the results in real time.</p>
+      </div>
+      <div class="col-md-6">
+        <img src="https://uploads-ssl.webflow.com/6266b596eef18c1931f938f9/62e1bc4edf7bad34e3eb0bde_blog_retrain_or_not_-32.png" 
+             alt="Retraining Image" 
+             class="img-fluid custom-image">
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-light py-3">
+    <div class="container text-center">
+      <p>&copy; 2024 FraudCatcher. All rights reserved.</p>
+      <a href="contact.html" class="text-decoration-none">Contact Us</a> | <a href="privacy.html" class="text-decoration-none">Privacy Policy</a>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

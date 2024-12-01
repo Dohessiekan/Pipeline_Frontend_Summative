@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fraud Detection Visualization</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Updated Plotly CDN link -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="/">WebApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="visualization">Visualization</a></li>
+        <li class="nav-item"><a class="nav-link" href="prediction">Prediction</a></li>
+        <li class="nav-item"><a class="nav-link" href="retraining">Retraining</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<body>
+  <div class="container my-5">
+    <h1 class="text-center mb-4">Fraud Detection Visualizations</h1>
+
+    <button id="load-data-btn" class="btn btn-primary mb-4">Load Data and Show Graph</button>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Dataset Distribution</h3>
+        <div id="distribution-chart" class="bg-light border p-3" style="height: 300px;"></div>
+        <p class="text-center">This chart shows the distribution of transaction amounts, highlighting variations and potential anomalies.</p>
+      </div>
+      <div class="col-md-6">
+        <h3>Correlation Heatmap</h3>
+        <div id="correlation-heatmap" class="bg-light border p-3" style="height: 300px;"></div>
+        <p class="text-center">The heatmap reveals correlations between transaction features, such as amount and category.</p>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-12">
+        <h3>Interactive Trend Analysis</h3>
+        <div id="trend-analysis" class="bg-light border p-3" style="height: 400px;"></div>
+        <p class="text-center">This interactive tool allows users to explore transaction trends over time, helping to identify fraud patterns.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadDataButton = document.getElementById('load-data-btn');
+      loadDataButton.addEventListener('click', function() {
+        // Fetch the dataset from FastAPI when the button is clicked
+        fetch('http://localhost:8000/get_dataset')
+          .then(response => response.json())
+          .then(data => {
+            // Ensure the data is valid
+            if (data && data.correlation_data && data.features) {
+              
+              // Dataset Distribution Chart (Histogram)
+              const amounts = data.transactions.map(item => item.amt); // Extracting 'amt' column for histogram
+              var trace1 = {
+                x: amounts,
+                type: 'histogram',
+                opacity: 0.75, // optional, for better visibility
+              };
+              Plotly.newPlot('distribution-chart', [trace1], { title: 'Transaction Amount Distribution' });
+
+              // Correlation Heatmap (Using data from FastAPI)
+              const correlationData = data.correlation_data;
+              const features = data.features;
+              var heatmapData = {
+                z: correlationData,
+                x: features,
+                y: features,
+                type: 'heatmap',
+              };
+              Plotly.newPlot('correlation-heatmap', [heatmapData], { title: 'Feature Correlations' });
+
+              // Interactive Trend Analysis (Transaction Trends Over Time)
+              const dates = data.transactions.map(item => item.trans_date_trans_time); // Extracting 'trans_date_trans_time'
+              const transactionValues = data.transactions.map(item => item.amt); // Extracting 'amt' for trend analysis
+              
+              // Optional: Convert dates to a format that Plotly can recognize
+              const formattedDates = dates.map(date => new Date(date)); // Convert the date string to Date object
+
+              var trace2 = {
+                x: formattedDates,
+                y: transactionValues,
+                mode: 'lines',
+                name: 'Transactions',
+              };
+
+              Plotly.newPlot('trend-analysis', [trace2], { title: 'Transaction Trends Over Time' });
+            } else {
+              console.error('Dataset is empty or invalid.');
+            }
+          })
+          .catch(error => console.error('Error fetching dataset:', error));
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

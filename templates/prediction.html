@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Prediction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #loading {
+            display: none;
+            text-align: center;
+        }
+        .banner {
+            background: url('vi.jpg') no-repeat center center;
+            background-size: cover;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .container {
+            margin-top: 20px;
+        }
+        #predictionForm {
+            display: none;
+        }
+    </style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="/">WebApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="visualization">Visualization</a></li>
+        <li class="nav-item"><a class="nav-link" href="prediction">Prediction</a></li>
+        <li class="nav-item"><a class="nav-link" href="retraining">Retraining</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<body>
+    <div class="banner">
+        Fraud Detection System
+    </div>
+    <div class="container">
+        <h1 class="text-center">Welcome to the Fraud Prediction Page</h1>
+        <p class="text-center">Click the button below to start your prediction process.</p>
+
+        <div class="text-center mb-4">
+            <button id="showFormButton" class="btn btn-success">Check the Prediction</button>
+        </div>
+
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="category">Category (Integer)</label>
+                <input type="number" class="form-control" id="category" name="category" placeholder="Enter category" min="0" max="50" required>
+            </div>
+            <div class="form-group">
+                <label for="amt">Amount (Float)</label>
+                <input type="number" class="form-control" id="amt" name="amt" placeholder="Enter amount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender" name="gender" required>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="city_pop">City Population (Integer)</label>
+                <input type="number" class="form-control" id="city_pop" name="city_pop" placeholder="Enter city population" required>
+            </div>
+            <div class="form-group">
+                <label for="trans_day">Transaction Day</label>
+                <input type="number" class="form-control" id="trans_day" name="trans_day" placeholder="Enter transaction day" min="1" max="31" required>
+            </div>
+            <div class="form-group">
+                <label for="trans_month">Transaction Month</label>
+                <input type="number" class="form-control" id="trans_month" name="trans_month" placeholder="Enter transaction month" min="1" max="12" required>
+            </div>
+            <div class="form-group">
+                <label for="trans_year">Transaction Year</label>
+                <input type="number" class="form-control" id="trans_year" name="trans_year" placeholder="Enter transaction year" required>
+            </div>
+            <div class="form-group">
+                <label for="trans_hour">Transaction Hour</label>
+                <input type="number" class="form-control" id="trans_hour" name="trans_hour" placeholder="Enter transaction hour" min="0" max="23" required>
+            </div>
+            <div class="form-group">
+                <label for="trans_minute">Transaction Minute</label>
+                <input type="number" class="form-control" id="trans_minute" name="trans_minute" placeholder="Enter transaction minute" min="0" max="59" required>
+            </div>
+            <div class="form-group">
+                <label for="lat">Latitude (Positive Float)</label>
+                <input type="number" class="form-control" id="lat" name="lat" placeholder="Enter latitude" step="0.0001" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="long">Longitude (Negative Float)</label>
+                <input type="number" class="form-control" id="long" name="long" placeholder="Enter longitude" step="0.0001" max="0" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Predict</button>
+        </form>
+
+        <div id="loading" class="mt-3">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#showFormButton').click(function () {
+                $('#predictionForm').slideDown();
+                $(this).hide();
+            });
+
+            $('#predictionForm').submit(function (event) {
+                event.preventDefault();
+
+                const data = {
+                    category: parseInt($('#category').val()),
+                    amt: parseFloat($('#amt').val()),
+                    gender: $('#gender').val() === 'M' ? 1 : 0,
+                    city_pop: parseInt($('#city_pop').val()),
+                    trans_day: parseInt($('#trans_day').val()),
+                    trans_month: parseInt($('#trans_month').val()),
+                    trans_year: parseInt($('#trans_year').val()),
+                    trans_hour: parseInt($('#trans_hour').val()),
+                    trans_minute: parseInt($('#trans_minute').val()),
+                    lat: parseFloat($('#lat').val()),
+                    long: parseFloat($('#long').val())
+                };
+
+                $('#loading').show();
+                $('#result').empty();
+
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/predict',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        $('#loading').hide();
+                        if (response.prediction === "not fraud") {
+                            $('#result').html(
+                                `<div class="alert alert-success">There is no fraud in this transaction.</div>`
+                            );
+                        } else {
+                            $('#result').html(
+                                `<div class="alert alert-danger">Prediction: ${response.prediction}</div>`
+                            );
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $('#loading').hide();
+                        $('#result').html(
+                            `<div class="alert alert-danger">Error: ${xhr.responseText || status}</div>`
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
