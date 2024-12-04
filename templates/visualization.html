@@ -57,8 +57,8 @@
     document.addEventListener('DOMContentLoaded', function() {
       const loadDataButton = document.getElementById('load-data-btn');
       loadDataButton.addEventListener('click', function() {
-        // Fetch the dataset from FastAPI when the button is clicked
-        fetch('http://localhost:8000/get_dataset')
+        // Fetch the dataset from the deployed API when the button is clicked
+        fetch('https://pipeline-summative-1.onrender.com/get_dataset')
           .then(response => response.json())
           .then(data => {
             // Ensure the data is valid
