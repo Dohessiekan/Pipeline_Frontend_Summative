@@ -128,7 +128,8 @@
 
             $('#predictionForm').submit(function (event) {
                 event.preventDefault();
-
+            
+                // Collect form data
                 const data = {
                     category: parseInt($('#category').val()),
                     amt: parseFloat($('#amt').val()),
@@ -142,36 +143,33 @@
                     lat: parseFloat($('#lat').val()),
                     long: parseFloat($('#long').val())
                 };
-
+            
                 $('#loading').show();
                 $('#result').empty();
-
+            
+                // Perform AJAX POST request
                 $.ajax({
-                    url: 'https://pipeline-summative-1.onrender.com/predict',
+                    url: 'https://pipeline-summative-3.onrender.com/predict',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(data),
                     success: function (response) {
                         $('#loading').hide();
-                        if (response.prediction === "not fraud") {
-                            $('#result').html(
-                                `<div class="alert alert-success">There is no fraud in this transaction.</div>`
-                            );
-                        } else {
-                            $('#result').html(
-                                `<div class="alert alert-danger">Prediction: ${response.prediction}</div>`
-                            );
-                        }
+                        const message =
+                            response.prediction === "not fraud"
+                                ? `<div class="alert alert-success">There is no fraud in this transaction.</div>`
+                                : `<div class="alert alert-danger">Prediction: ${response.prediction}</div>`;
+                        $('#result').html(message);
                     },
-                    error: function (xhr, status, error) {
+                    error: function (xhr) {
                         $('#loading').hide();
-                        $('#result').html(
-                            `<div class="alert alert-danger">Error: ${xhr.responseText || status}</div>`
-                        );
+                        const errorMessage = xhr.responseText
+                            ? `Error: ${xhr.responseText}`
+                            : 'An unexpected error occurred.';
+                        $('#result').html(`<div class="alert alert-danger">${errorMessage}</div>`);
                     }
                 });
-            });
-        });
+            });            
     </script>
 </body>
 </html>

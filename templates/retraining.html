@@ -64,73 +64,73 @@
     document.getElementById('retrainButton').addEventListener('click', async () => { 
       const fileInput = document.getElementById('dataFile');
       const file = fileInput.files[0];
-
+  
       if (!file) {
         alert('Please select a file before retraining.');
         return;
       }
-
+  
       // Show loading message
       const loadingMessage = document.getElementById('loadingMessage');
       loadingMessage.style.display = 'block';
-
+  
       try {
         // Prepare the file for upload
         const formData = new FormData();
         formData.append('file', file);
-
-        // Make the API request
-        const response = await fetch('https://pipeline-summative-1.onrender.com/retrain/', {
+  
+        // Make the API request for retraining
+        const retrainResponse = await fetch('https://pipeline-summative-3.onrender.com/retrain/', {
           method: 'POST',
           body: formData
         });
-
+  
         // Hide loading message
         loadingMessage.style.display = 'none';
-
-        // Check if the response is successful
-        if (response.ok) {
-          const data = await response.json();
-
-          // Update the status section with the response data
+  
+        // Handle retraining response
+        if (retrainResponse.ok) {
+          const retrainData = await retrainResponse.json();
+  
+          // Update the status section
           const statusSection = document.getElementById('statusSection');
           const statusMessage = document.getElementById('statusMessage');
-
+  
           statusSection.style.display = 'block';
           statusMessage.className = 'alert alert-success';
           statusMessage.innerHTML = `
-            <strong>${data.message}</strong><br>
-            Accuracy: ${data.accuracy}<br>
-            Model File: ${data.model_file}
+            <strong>${retrainData.message}</strong><br>
+            Accuracy: ${retrainData.accuracy}<br>
+            Model File: <a href="${retrainData.model_file}" target="_blank">Download</a>
           `;
-
+  
           // Fetch and display the confusion matrix
-          const confusionMatrixResponse = await fetch('https://pipeline-summative-1.onrender.com/confusion-matrix/');
+          const confusionMatrixResponse = await fetch('https://pipeline-summative-3.onrender.com/confusion-matrix/');
           if (confusionMatrixResponse.ok) {
             const confusionMatrixImage = document.getElementById('confusionMatrixImage');
             confusionMatrixImage.src = URL.createObjectURL(await confusionMatrixResponse.blob());
             document.getElementById('confusionMatrixSection').style.display = 'block';
           } else {
-            throw new Error('Failed to fetch confusion matrix.');
+            console.warn('Confusion matrix fetch failed.');
           }
-
+  
         } else {
-          const errorData = await response.json();
+          const errorData = await retrainResponse.json();
           throw new Error(errorData.detail || 'An error occurred during retraining.');
         }
       } catch (error) {
         // Hide loading message
         loadingMessage.style.display = 'none';
-
+  
         // Display error message
         const statusSection = document.getElementById('statusSection');
         const statusMessage = document.getElementById('statusMessage');
-
+  
         statusSection.style.display = 'block';
         statusMessage.className = 'alert alert-danger';
         statusMessage.innerHTML = `<strong>Error:</strong> ${error.message}`;
       }
     });
-  </script>
+  </script>  
 </body>
 </html>

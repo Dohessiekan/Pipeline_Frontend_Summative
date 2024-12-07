@@ -1,6 +1,19 @@
 from flask import Flask, render_template
+from flask_cors import CORS  # Import the CORS middleware for Flask
 
 app = Flask(__name__)
+
+# Define the allowed origins
+origins = [
+    "http://localhost:8000",
+    "http://localhost",
+    "http://127.0.0.1:5000",  # Local development
+    "https://pipeline-frontend-summative.onrender.com",  # Frontend URL
+    "https://pipeline-summative-3.onrender.com",  # API URL
+]
+
+# Enable CORS for these origins
+CORS(app, origins=origins, allow_credentials=False, allow_methods=["*"], allow_headers=["*"])
 
 @app.route('/')
 def home():
