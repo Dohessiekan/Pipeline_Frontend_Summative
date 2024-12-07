@@ -82,7 +82,8 @@
         // Make the API request for retraining
         const retrainResponse = await fetch('https://pipeline-summative-3.onrender.com/retrain/', {
           method: 'POST',
-          body: formData
+          body: formData,
+          mode: 'no-cors'
         });
   
         // Hide loading message
