@@ -3,6 +3,7 @@ from flask_cors import CORS  # Import the CORS middleware for Flask
 
 app = Flask(__name__)
 
+CORS(app, origins="https://pipeline-frontend-summative.onrender.com")
 # Define the allowed origins
 origins = [
     "http://localhost:8000",
