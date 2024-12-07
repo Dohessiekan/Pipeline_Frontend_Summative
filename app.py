@@ -12,8 +12,12 @@ origins = [
     "https://pipeline-summative-3.onrender.com",  # API URL
 ]
 
-# Enable CORS for these origins
-CORS(app, origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+# Apply CORS only to specific routes
+CORS(app, resources={
+    r"/prediction": {"origins": origins},
+    r"/visualization": {"origins": origins},
+    r"/retraining": {"origins": origins}
+}, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 @app.route('/')
 def home():
