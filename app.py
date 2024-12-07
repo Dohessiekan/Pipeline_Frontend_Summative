@@ -13,7 +13,7 @@ origins = [
 ]
 
 # Enable CORS for these origins
-CORS(app, origins=origins, allow_credentials=False, allow_methods=["*"], allow_headers=["*"])
+CORS(app, origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 @app.route('/')
 def home():
