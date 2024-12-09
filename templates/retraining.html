@@ -80,7 +80,7 @@
         formData.append('file', file);
     
         // Make the API request for retraining
-        const retrainResponse = await fetch('http://127.0.0.1:8000/retrain/', {
+        const retrainResponse = await fetch('https://pipeline-summative.onrender.com/retrain/', {
           method: 'POST',
           body: formData,
         });
@@ -105,7 +105,7 @@
         // Fetch and display the confusion matrix
         const confusionMatrixSection = document.getElementById('confusionMatrixSection');
         const confusionMatrixImage = document.getElementById('confusionMatrixImage');
-        confusionMatrixImage.src = 'http://127.0.0.1:8000/confusion-matrix/';
+        confusionMatrixImage.src = 'https://pipeline-summative.onrender.com/confusion-matrix/';
         confusionMatrixSection.style.display = 'block';
     
       } catch (error) {
