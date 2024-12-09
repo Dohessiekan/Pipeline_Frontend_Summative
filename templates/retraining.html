@@ -64,74 +64,62 @@
     document.getElementById('retrainButton').addEventListener('click', async () => { 
       const fileInput = document.getElementById('dataFile');
       const file = fileInput.files[0];
-  
+    
       if (!file) {
         alert('Please select a file before retraining.');
         return;
       }
-  
+    
       // Show loading message
       const loadingMessage = document.getElementById('loadingMessage');
       loadingMessage.style.display = 'block';
-  
+    
       try {
         // Prepare the file for upload
         const formData = new FormData();
         formData.append('file', file);
-  
+    
         // Make the API request for retraining
         const retrainResponse = await fetch('http://127.0.0.1:8000/retrain/', {
           method: 'POST',
           body: formData,
-          mode: 'no-cors'
         });
-  
+    
         // Hide loading message
         loadingMessage.style.display = 'none';
-  
-        // Handle retraining response
-        if (retrainResponse.ok) {
-          const retrainData = await retrainResponse.json();
-  
-          // Update the status section
-          const statusSection = document.getElementById('statusSection');
-          const statusMessage = document.getElementById('statusMessage');
-  
-          statusSection.style.display = 'block';
-          statusMessage.className = 'alert alert-success';
-          statusMessage.innerHTML = `
-            <strong>${retrainData.message}</strong><br>
-            Accuracy: ${retrainData.accuracy}<br>
-            Model File: <a href="${retrainData.model_file}" target="_blank">Download</a>
-          `;
-  
-          // Fetch and display the confusion matrix
-          const confusionMatrixResponse = await fetch('http://127.0.0.1:8000/confusion-matrix/');
-          if (confusionMatrixResponse.ok) {
-            const confusionMatrixImage = document.getElementById('confusionMatrixImage');
-            confusionMatrixImage.src = URL.createObjectURL(await confusionMatrixResponse.blob());
-            document.getElementById('confusionMatrixSection').style.display = 'block';
-          } else {
-            console.warn('Confusion matrix fetch failed.');
-          }
-  
-        } else {
-          const errorData = await retrainResponse.json();
-          throw new Error(errorData.detail || 'An error occurred during retraining.');
+    
+        // Check the response status
+        if (!retrainResponse.ok) {
+          throw new Error(`Retraining failed: ${retrainResponse.statusText}`);
         }
+    
+        const retrainData = await retrainResponse.json();
+    
+        // Display success message and accuracy
+        const statusSection = document.getElementById('statusSection');
+        const statusMessage = document.getElementById('statusMessage');
+        statusSection.style.display = 'block';
+        statusMessage.textContent = `Model retrained successfully with accuracy: ${retrainData.accuracy}`;
+        statusMessage.className = 'alert alert-success';
+    
+        // Fetch and display the confusion matrix
+        const confusionMatrixSection = document.getElementById('confusionMatrixSection');
+        const confusionMatrixImage = document.getElementById('confusionMatrixImage');
+        confusionMatrixImage.src = 'http://127.0.0.1:8000/confusion-matrix/';
+        confusionMatrixSection.style.display = 'block';
+    
       } catch (error) {
         // Hide loading message
         loadingMessage.style.display = 'none';
-  
+    
         // Display error message
         const statusSection = document.getElementById('statusSection');
         const statusMessage = document.getElementById('statusMessage');
-  
         statusSection.style.display = 'block';
+        statusMessage.textContent = `Error: ${error.message}`;
         statusMessage.className = 'alert alert-danger';
-        statusMessage.innerHTML = `<strong>Error:</strong> ${error.message}`;
       }
-    });
+    });    
   </script>  
 </body>
 </html>
