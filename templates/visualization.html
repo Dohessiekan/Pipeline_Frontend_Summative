@@ -59,8 +59,8 @@
       loadDataButton.addEventListener('click', function() {
         // Fetch the dataset from the deployed API when the button is clicked
         fetch('https://pipeline-summative.onrender.com/get_dataset/', {
-           mode: 'no-cors'
-        });
+          mode: 'no-cors'
+        })
           .then(response => response.json())
           .then(data => {
             // Ensure the data is valid
@@ -74,7 +74,7 @@
                 opacity: 0.75, // optional, for better visibility
               };
               Plotly.newPlot('distribution-chart', [trace1], { title: 'Transaction Amount Distribution' });
-
+        
               // Correlation Heatmap (Using data from FastAPI)
               const correlationData = data.correlation_data;
               const features = data.features;
@@ -85,27 +85,27 @@
                 type: 'heatmap',
               };
               Plotly.newPlot('correlation-heatmap', [heatmapData], { title: 'Feature Correlations' });
-
+        
               // Interactive Trend Analysis (Transaction Trends Over Time)
               const dates = data.transactions.map(item => item.trans_date_trans_time); // Extracting 'trans_date_trans_time'
               const transactionValues = data.transactions.map(item => item.amt); // Extracting 'amt' for trend analysis
               
               // Optional: Convert dates to a format that Plotly can recognize
               const formattedDates = dates.map(date => new Date(date)); // Convert the date string to Date object
-
+        
               var trace2 = {
                 x: formattedDates,
                 y: transactionValues,
                 mode: 'lines',
                 name: 'Transactions',
               };
-
+        
               Plotly.newPlot('trend-analysis', [trace2], { title: 'Transaction Trends Over Time' });
             } else {
               console.error('Dataset is empty or invalid.');
             }
           })
-          .catch(error => console.error('Error fetching dataset:', error));
+          .catch(error => console.error('Error fetching dataset:', error));        
       });
     });
   </script>
