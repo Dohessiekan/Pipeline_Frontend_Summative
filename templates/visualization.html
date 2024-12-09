@@ -58,7 +58,7 @@
       const loadDataButton = document.getElementById('load-data-btn');
       loadDataButton.addEventListener('click', function() {
         // Fetch the dataset from the deployed API when the button is clicked
-        fetch('https://pipeline-summative.onrender.com/get_dataset'{
+        fetch('https://pipeline-summative.onrender.com/get_dataset/', {
            mode: 'no-cors'
         });
           .then(response => response.json())
