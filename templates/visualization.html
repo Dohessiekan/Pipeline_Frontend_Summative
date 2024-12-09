@@ -58,9 +58,7 @@
       const loadDataButton = document.getElementById('load-data-btn');
       loadDataButton.addEventListener('click', function() {
         // Fetch the dataset from the deployed API when the button is clicked
-        fetch('http://localhost:8000/get_dataset/' ,{
-          mode: 'no-cors'
-        })
+        fetch('http://localhost:8000/get_dataset/')
           .then(response => {
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
