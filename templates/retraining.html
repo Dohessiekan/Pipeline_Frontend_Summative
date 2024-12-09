@@ -83,6 +83,7 @@
         const retrainResponse = await fetch('https://pipeline-summative.onrender.com/retrain/', {
           method: 'POST',
           body: formData,
+           mode: 'no-cors'
         });
     
         // Hide loading message
