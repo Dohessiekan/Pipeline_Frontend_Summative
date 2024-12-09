@@ -80,7 +80,7 @@
         formData.append('file', file);
     
         // Make the API request for retraining
-        const retrainResponse = await fetch('https://pipeline-summative.onrender.com/retrain/', {
+        const retrainResponse = await fetch('https://ca3a-102-22-186-66.ngrok-free.app/retrain/', {
           method: 'POST',
           body: formData,
            mode: 'no-cors'
@@ -106,7 +106,7 @@
         // Fetch and display the confusion matrix
         const confusionMatrixSection = document.getElementById('confusionMatrixSection');
         const confusionMatrixImage = document.getElementById('confusionMatrixImage');
-        confusionMatrixImage.src = 'https://pipeline-summative.onrender.com/confusion-matrix/';
+        confusionMatrixImage.src = 'https://ca3a-102-22-186-66.ngrok-free.app/confusion-matrix/';
         confusionMatrixSection.style.display = 'block';
     
       } catch (error) {
