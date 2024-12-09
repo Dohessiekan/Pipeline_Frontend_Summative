@@ -8,7 +8,8 @@ CORS(app, origins="https://pipeline-frontend-summative.onrender.com")
 origins = [
     "http://localhost:8000",
     "http://localhost",
-    "http://127.0.0.1:5000",  # Local development
+    "http://127.0.0.1:5000",# Local development
+    "http://localhost:8000",
     "https://pipeline-frontend-summative.onrender.com",  # Frontend URL
     "https://pipeline-summative-3.onrender.com",  # API URL
 ]
