@@ -54,12 +54,11 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const loadDataButton = document.getElementById('load-data-btn');
-      loadDataButton.addEventListener('click', function() {
-        // Fetch the dataset from the deployed API when the button is clicked
-        const backendUrl = 'https://ca3a-102-22-186-66.ngrok-free.app/get_dataset/'; // Use deployed backend URL
-
+      loadDataButton.addEventListener('click', function () {
+        const backendUrl = 'https://ca3a-102-22-186-66.ngrok-free.app/get_dataset/'; // Updated backend URL
+    
         fetch(backendUrl)
           .then(response => {
             if (!response.ok) {
@@ -68,52 +67,44 @@
             return response.json();
           })
           .then(data => {
-            if (data && Array.isArray(data.transactions)) {
-              // Dataset Distribution Chart (Histogram)
-              const amounts = data.transactions.map(item => item.amt);
-              const trace1 = {
-                x: amounts,
-                type: 'histogram',
-                opacity: 0.75
-              };
-              Plotly.newPlot('distribution-chart', [trace1], { title: 'Transaction Amount Distribution' });
-
-              // Correlation Heatmap
-              const { correlation_data, features } = data;
-              if (correlation_data && features) {
-                const heatmapData = {
-                  z: correlation_data,
-                  x: features,
-                  y: features,
-                  type: 'heatmap'
-                };
-                Plotly.newPlot('correlation-heatmap', [heatmapData], { title: 'Feature Correlations' });
-              } else {
-                console.error('Correlation data or features missing.');
-              }
-
-              // Interactive Trend Analysis
-              const dates = data.transactions.map(item => item.trans_date_trans_time);
-              const transactionValues = data.transactions.map(item => item.amt);
-              const formattedDates = dates.map(date => new Date(date));
-
-              const trace2 = {
-                x: formattedDates,
-                y: transactionValues,
-                mode: 'lines',
-                name: 'Transactions'
-              };
-              Plotly.newPlot('trend-analysis', [trace2], { title: 'Transaction Trends Over Time' });
-            } else {
-              console.error('Invalid or missing transaction data.');
-            }
+            console.log('Fetched Data:', data);
+            // Dataset Distribution Chart (Histogram)
+            const amounts = data.transactions.map(item => item.amt);
+            const trace1 = {
+              x: amounts,
+              type: 'histogram',
+              opacity: 0.75
+            };
+            Plotly.newPlot('distribution-chart', [trace1], { title: 'Transaction Amount Distribution' });
+    
+            // Correlation Heatmap
+            const { correlation_data, features } = data;
+            const heatmapData = {
+              z: correlation_data,
+              x: features,
+              y: features,
+              type: 'heatmap'
+            };
+            Plotly.newPlot('correlation-heatmap', [heatmapData], { title: 'Feature Correlations' });
+    
+            // Interactive Trend Analysis
+            const dates = data.transactions.map(item => item.trans_date_trans_time);
+            const transactionValues = data.transactions.map(item => item.amt);
+            const formattedDates = dates.map(date => new Date(date));
+            const trace2 = {
+              x: formattedDates,
+              y: transactionValues,
+              mode: 'lines',
+              name: 'Transactions'
+            };
+            Plotly.newPlot('trend-analysis', [trace2], { title: 'Transaction Trends Over Time' });
           })
           .catch(error => {
             console.error('Error fetching dataset:', error);
             alert('Failed to load data. Please check the backend connection.');
           });
       });
-    });
+    });    
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
