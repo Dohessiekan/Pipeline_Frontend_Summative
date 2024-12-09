@@ -58,7 +58,7 @@
       const loadDataButton = document.getElementById('load-data-btn');
       loadDataButton.addEventListener('click', function() {
         // Fetch the dataset from the deployed API when the button is clicked
-        const backendUrl = 'http://localhost:8000/get_dataset/'; // Use deployed backend URL
+        const backendUrl = 'https://ca3a-102-22-186-66.ngrok-free.app/get_dataset/'; // Use deployed backend URL
 
         fetch(backendUrl)
           .then(response => {
